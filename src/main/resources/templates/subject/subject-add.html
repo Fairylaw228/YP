@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+
+<link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add movie</title>
+</head>
+<body>
+<div th:insert="header">...</div>
+<div class="w-full max-w-xs">
+    <form th:object="${subject}" th:action="${'/subject/add'}" method="post"
+          class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+        <label>
+            Название:
+            <input th:field="*{name}" type="text" name="name" placeholder="Введите название предмета"
+                   class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+        </label>
+        <div style="color: red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+        <br>
+        <label>
+            Код предмета:
+            <input th:field="*{subject_code}" type="text" name="subject_code" placeholder="Введите код предмета"
+                   class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+        </label>
+        <div style="color: red" th:if="${#fields.hasErrors('subject_code')}" th:errors="*{subject_code}"></div>
+        <br>
+        <button type="submit"
+                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+            Добавить предмет
+        </button>
+    </form>
+</div>
+</body>
+</html>

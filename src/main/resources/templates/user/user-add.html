@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Add user</title>
+</head>
+<body>
+<div th:insert="header">...</div>
+<div class="w-full max-w-xs">
+    <form th:object="${user}" th:action="@{/registration}" method="post"
+          class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+        <label >
+            Введите имя
+            <input required th:field="*{login}" type="text" name="login" placeholder="Имя"
+                   class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"/>
+        </label>
+        <div style="color: red" th:if="${#fields.hasErrors('login')}" th:errors="*{login}"></div>
+        <br>
+        <label >
+            Введите пароль
+            <input required th:field="*{password}" type="password" name="password" placeholder="Имя"
+                   class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"/>
+        </label>
+        <div style="color: red" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
+        <br>
+
+        <br>
+        <div th:each="role : ${roles}">
+
+            <label>
+                <input th:id="${role}" type="checkbox" th:name="${'roles[]'}" th:value="${role}"
+                />
+            </label>
+            <label th:text="${role}"/>
+            
+            <br>
+        </div>
+        <div class="flex items-center justify-between">
+            <button type="submit"
+                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                Добавить пользователя
+            </button>
+        </div>
+    </form>
+</div>
+</body>
+</html>

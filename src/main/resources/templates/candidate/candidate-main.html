@@ -1,0 +1,34 @@
+<!DOCTYPE HTML>
+
+<link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+    <title>Candidate</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<body>
+<div th:insert="header">...</div>
+<div class="w-full max-w-xs">
+    <h1 class="font-bold">Кандитат</h1>
+    <a sec:authorize="hasAnyAuthority('TEACHER')" href="/candidate/filter"
+       class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800">Поиск
+        кандидатов</a>
+    <br>
+    <div th:each="el : ${candidates}" th:if="${el.user.active}">
+        <div class="inline-block align-baseline rounded w-full py-2 px-3 bg-transparent hover:bg-teal-100 shadow">
+            <h3 th:text="${el.submissionDate}" class="font-bold"></h3>
+            <h3 th:text="${el.user.login}"></h3>
+            <p>
+                <a class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800"
+                   th:href="'/candidate/edit/'+${el.getId()}">Редактировать</a>
+                <a class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800"
+                   th:href="'/candidate/show/'+${el.getId()}">Посмореть</a>
+                <a class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800"
+                   th:href="'/candidate/del/'+${el.getId()}">Удалить</a>
+
+            </p>
+        </div>
+    </div>
+</div>
+</body>
+</html>

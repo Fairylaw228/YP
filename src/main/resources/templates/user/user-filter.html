@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Filtered users</title>
+    <meta charset="UTF-8">
+</head>
+<body>
+<div th:insert="header">...</div>
+
+<div class="w-full max-w-xs">
+    <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+        <h2 class="font-bold">Фильтрация</h2>
+        <label>
+            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+                   id="password" type="text" name="title">
+        </label>
+        <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+               type="submit" formmethod="post" formaction="/user/filter/result" value="Найти">
+        <br>
+        <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+               type="submit" formmethod="post" formaction="/user/filter_strict/result" value="Найти (строгий поиск)">
+        <div th:each="el : ${result}">
+            <h3 class="font-bold" th:text="${el.login}"></h3>
+            <p th:text="${el.birthdate}"></p>
+        </div>
+    </form>
+</div>
+</body>
+</html>

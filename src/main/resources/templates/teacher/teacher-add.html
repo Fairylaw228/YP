@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+
+<link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add summary</title>
+</head>
+<body>
+<div th:insert="header">...</div>
+<div class="w-full max-w-xs">
+    <form th:object="${teacher}" th:action="${'/teacher/add'}" method="post"
+          class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+        <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2">Пользователи</label>
+            <div th:each="sub : ${subjects}">
+                <input th:name="${'subjectList[]'}" th:value="${sub.id}" th:checked="${sub.id!=null && #lists.contains(sub.teacher_infoList, teacher)}" class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                   type="checkbox">
+                <label th:text="${sub.name}"></label>
+            </div>
+        </div>
+<!--        <label >-->
+<!--            Стаж работы с ...-->
+<!--            <input required th:field="*{teachSince}" type="date" name="teachSince" placeholder="Введите cтаж работы"-->
+<!--                   class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"/>-->
+<!--        </label>-->
+<!--&lt;!&ndash;        <div style="color: red" th:if="${#fields.hasErrors('teachSince')}" th:errors="*{teachSince}"></div>&ndash;&gt;-->
+<!--        <br>-->
+
+        <button type="submit"
+                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+            Добавить иформацию о преподе
+        </button>
+    </form>
+</div>
+</body>
+</html>

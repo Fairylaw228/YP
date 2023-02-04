@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Group</title>
+</head>
+<body>
+<div th:insert="header">...</div>
+<div class="w-full max-w-xs">
+    <form th:object="${group}" th:action="${'/group/edit/'+group.getId()}" method="post"
+          class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+        <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2">Пользователи</label>
+            <div th:each="user : ${users}">
+                <input th:name="${'users[]'}" th:value="${user.id}" th:checked="${user.id!=null && #lists.contains(user.groups, group)}" class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                   type="checkbox">
+                <label th:text="${user.login}"></label>
+            </div>
+        </div>
+        <label> Педагог огранизатор:
+            <select th:field="*{teacher_organizer}">
+                <option  th:each="usr : ${teachers}" th:text="${usr.login}" th:value="${usr.id}"></option>
+            </select>
+        </label> <br>
+
+        <label> Программа подготовки:
+            <select th:field="*{preparationProgram}">
+                <option  th:each="preps : ${preparation_programs}" th:text="${preps.name}" th:value="${preps.id}"></option>
+            </select>
+        </label> <br>
+        <label> Максимальное количество групп:
+            <input type="number" th:field="*{capacity}" min="1"/>
+
+        <button type="submit"
+                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+            Редактировать отделение
+        </button>
+    </form>
+</div>
+</body>
+</html>

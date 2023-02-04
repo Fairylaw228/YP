@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+<html xmlns:th="http://www.thymeleaf.org" lang="en" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit preparation_program</title>
+</head>
+<body>
+<div th:insert="header">...</div>
+<div class="w-full max-w-xs">
+     <form th:object="${candidate_info}" th:action="${'/candidate/edit/'+candidate_info.id}" method="post"
+          class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+         <label sec:authorize="hasAnyAuthority('HR','ADMISSION','TEACHER')">
+            Дата загрузки:
+            <input th:field="*{submissionDate}" type="date" name="submissionDate" placeholder="Введите дату загрузки"
+                   class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+        </label>
+        <div style="color: red" th:if="${#fields.hasErrors('submissionDate')}" th:errors="*{submissionDate}"></div>
+        <br>
+
+        <label> Отделение:
+            <select th:field="*{preparationProgram}">
+                <option  th:each="deps : ${preparationPrograms}" th:text="${deps.name}" th:value="${deps.id}"></option>
+            </select>
+        </label> <br>
+         <input type="hidden" th:field="*{user}" th:value="*{user.id}">
+
+<!--        <label> Пользователь:-->
+<!--            <select th:field="*{user}">-->
+<!--                <option  th:each="usr : ${users}" th:text="${usr.login}" th:value="${usr.id}"></option>-->
+<!--            </select>-->
+<!--        </label> <br>-->
+
+        <button type="submit"
+                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+            Редактировать Кандидата
+        </button>
+    </form>
+</div>
+</body>
+</html>

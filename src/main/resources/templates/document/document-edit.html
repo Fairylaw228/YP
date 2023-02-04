@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet"
+      xmlns:sec="http://www.w3.org/1999/xhtml">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit preparation_program</title>
+</head>
+<body>
+<div th:insert="header">...</div>
+<div class="w-full max-w-xs">
+    <form th:object="${documents}" th:action="${'/document/edit/'+documents.id}" enctype="multipart/form-data"
+          method="post"
+          class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+        <label>
+            Файл:
+            <input type="file" name="file" accept=".pdf"
+                   class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400">
+        </label>
+        <!--        <div style="color: red" th:if="${#fields.hasErrors('fileName')}" th:errors="*{fileName}"></div>-->
+        <br>
+
+        <label>
+            Дата загрузки:
+            <input th:field="*{date}" type="date" name="date" placeholder="Введите оценку"
+                   class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+        </label>
+        <div style="color: red" th:if="${#fields.hasErrors('date')}" th:errors="*{date}"></div>
+        <br>
+
+        <label sec:authorize="hasAnyAuthority('HR','ADMISSION','ARCHIVE')">
+            Дата архивации:
+            <input th:field="*{archive_date}" type="date" name="archive_date" placeholder="Введите оценку"
+                   class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+        </label>
+        <div style="color: red" th:if="${#fields.hasErrors('archive_date')}" th:errors="*{archive_date}"></div>
+        <br>
+        <a th:href="'/hr/editor/'+${document.getId()}"
+           class=" inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800">
+            Редактировать оценки
+        </a>
+
+        <button type="submit"
+                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline my-4">
+            Редактировать документ
+        </button>
+    </form>
+</div>
+</body>
+</html>

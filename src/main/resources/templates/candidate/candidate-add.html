@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Add candidate</title>
+</head>
+<body>
+<div th:insert="header">...</div>
+<div class="w-full max-w-xs">
+    <form th:object="${candidate_info}" th:action="${'/candidate/add'}" method="post"
+          class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+        <p>Форма для кандидата</p><br>
+        <label> Целевое отделение в вузе:
+            <select th:field="*{preparationProgram}">
+                <option th:each="deps : ${preparationPrograms}" th:text="${deps.name}" th:value="${deps.id}"></option>
+            </select>
+        </label>
+
+        <br>
+
+        <label> Где вы учились:
+            <select th:field="*{education_institution}">
+                <option th:each="ed : ${education_institutions}" th:text="${ed.name}" th:value="${ed.id}"></option>
+            </select>
+            <div style="color: red" th:if="${#fields.hasErrors('education_institution')}"
+                 th:errors="*{education_institution}"></div>
+        </label> <br>
+
+        <button type="submit"
+                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+            Добавить кандидата
+        </button>
+    </form>
+</div>
+</body>
+</html>

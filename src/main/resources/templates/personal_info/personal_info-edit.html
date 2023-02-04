@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>personal_info</title>
+</head>
+<body>
+<div th:insert="header">...</div>
+<div class="w-full max-w-xs">
+    <form th:object="${personal_info}" th:action="${'/personal_info/edit/'+personal_info.getId()}" method="post"
+          class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+        <p th:text="${userLogin}"></p>
+        <label>
+            Имя:
+            <input th:field="*{name}" type="text" name="name" placeholder="Введите имя"
+                   class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+        </label>
+        <div style="color: red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+        <br>
+        <label>
+            Фамилия:
+            <input th:field="*{surname}" type="text" name="surname" placeholder="Введите фамилию"
+                   class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+        </label>
+        <div style="color: red" th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}"></div>
+        <br>
+        <label>
+            Отчество:
+            <input th:field="*{sec_name}" type="text" name="sec_name" placeholder="Введите отчество"
+                   class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+        </label>
+        <div style="color: red" th:if="${#fields.hasErrors('sec_name')}" th:errors="*{sec_name}"></div>
+        <br>
+        <label>
+            Дата рождения
+            <input required th:field="*{birthdate}" type="date" name="birthdate" placeholder="Введите дату рождения"
+                   class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"/>
+        </label>
+        <div style="color: red" th:if="${#fields.hasErrors('birthdate')}" th:errors="*{birthdate}"></div>
+        <br>
+        <label>
+            Серия паспорта:
+            <input th:field="*{pass_id}" type="text" name="pass_id" placeholder="Введите серию паспорта"
+                   class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+        </label>
+        <div style="color: red" th:if="${#fields.hasErrors('pass_id')}" th:errors="*{pass_id}"></div>
+        <br>
+        <label>
+            Является ли мужчиной:
+            <input th:field="*{is_male}" type="checkbox" name="is_male">
+        </label>
+        <div style="color: red" th:if="${#fields.hasErrors('is_male')}" th:errors="*{pass_id}"></div>
+        <br>
+
+
+        <button type="submit"
+                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+            Редактировать персональные данные
+        </button>
+    </form>
+</div>
+</body>
+</html>

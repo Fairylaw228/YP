@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+
+<link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Add document</title>
+</head>
+<body>
+<div th:insert="header">...</div>
+<div class="w-full max-w-xs">
+<!--        <p th:text="'Здавствуйте, ' + ${user.getPersonal_info().getName()}"></p>-->
+    <form th:object="${document}" th:action="${'/document/add'}" enctype="multipart/form-data" method="post"
+          class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+
+
+        <br>
+        <label>
+            Прикрепите файл:
+            <input required type="file" name="file" accept=".pdf"
+                   class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400">
+        </label>
+<!--        <div style="color: red" th:if="${#fields.hasErrors('file')}" th:errors="*{fileName}"></div>-->
+        <br>
+
+        <label>
+            Отправить документ в приемную коммисию:
+            <input th:field="*{toAdmission}" type="checkbox">
+        </label>
+        <div style="color: red" th:if="${#fields.hasErrors('toAdmission')}" th:errors="*{toAdmission}"></div>
+        <br>
+
+        <button type="submit"
+                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+            Добавить документ
+        </button>
+    </form>
+</div>
+</body>
+</html>

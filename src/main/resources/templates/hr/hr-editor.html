@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>HR/ADMISSION workspace</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<div th:insert="header">...</div>
+<body>
+<div class="p-4 w-1/2 shadow-xl rounded-lg">
+
+    <p class="text-2xl" th:text="'Целевая программа обучеия '+ ${preparationProgram}"></p><br>
+    <a class="my-4 inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800"
+       th:href="'/document/files/'+${document.fileName}">Скачать документ</a>
+
+
+    <div th:if="!${#lists.isEmpty(subjects)}">
+        <form th:object="${summary}" th:action="${'/hr/editor/add'}" method="post">
+            <h1 class="font-bold" th:value="${username}"></h1>
+            <label class="my-4">
+                Оценка:
+                <br><input th:field="*{mark}" type="number" name="mark" placeholder="Введите оценку" max="5" min="2"
+                           class="shadow appearance-none border rounded w-1/6 py-2  text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+            </label>
+            <div style="color: red" th:if="${#fields.hasErrors('mark')}" th:errors="*{mark}"></div>
+            <br>
+            <label> Предмет:
+                <select class=" border text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-1/5 dark:placeholder-gray-400 dark:text-white  "
+                        th:field="*{subject}" required>
+                    <option th:each="sub : ${subjects}" th:text="${sub.name}" th:value="${sub.id}"
+                            class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"></option>
+                </select>
+            </label>
+            <div style="color: red" th:if="${#fields.hasErrors('subject')}" th:errors="*{subject}"></div>
+
+            <button type="submit"
+                    class="my-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                Добавить оценку
+            </button>
+        </form>
+    </div>
+    <div class="overflow-x-visible relative shadow-md sm:rounded-lg">
+        <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <tr>
+                <th class="py-3 px-6">Номер оценки</th>
+                <th class="py-3 px-6">Предмет</th>
+                <th>Оценка</th>
+            </tr>
+            </thead>
+
+            <tbody class="uppercase text-gray-900 dark:text-white">
+
+            <tr th:each="sum,iterationstatus :${summaries}">
+                <td class="py-4 px-6" th:text="${iterationstatus.count}">1</td>
+                <td class="py-4 px-6" th:text="${sum.getSubject().getName()}"></td>
+                <td class="px-auto"><input th:value="${sum.getMark()}" type="number" th:data-filtro="${sum.getId()}"
+                                           th:id="'summary '+${sum.getId()}"
+                                           name="add1" max="5" min="2"
+                                           class="border-none shadow appearance-none border rounded w-20 py-2
+                                           text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                </td>
+            </tr>
+            </tbody>
+
+            <tfoot>
+            <tr class="font-semibold text-gray-900 dark:text-white">
+                <th scope="row" class="py-3 px-6 text-base">Средний балл</th>
+                <td></td>
+                <td th:text="${marks_average}"></td>
+            </tr>
+            </tfoot>
+        </table>
+    </div>
+    <a sec:authorize="hasAnyAuthority('HR','ADMISSION')"
+       class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800"
+       th:href="'/hr/editor/'+${document.getId()} + '/export'">Экспорт результатов</a>
+
+    <div class="shadow-lg rounded-lg overflow-hidden">
+        <div class="py-3 px-5 bg-gray-50">Успеваемость</div>
+        <canvas class="p-10" id="chartRadar"></canvas>
+    </div>
+
+    <form th:object="${document}" th:action="${'/hr/editor/status/'}" method="post"
+          sec:authorize="hasAnyAuthority('HR','ADMISSION')">
+        <label> Статусы:
+            <select class=" border text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-1/5 dark:placeholder-gray-400 dark:text-white  "
+                    th:field="*{status}" required>
+                <option th:each="sub : ${document_status}" th:value="${sub}" th:text="${sub}"
+                        class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"></option>
+            </select>
+        </label>
+        <button type="submit"
+                class="my-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+            Изменить статус документа
+        </button>
+    </form>
+
+
+</div>
+<script>
+
+    $("[data-filtro]").bind('change paste keyup', function () {
+        jQuery.ajax({
+            url: "/hr/editor/update?summary=" + $(this).attr("data-filtro") + "&mark=" + $(this).val().toString(),
+            success: function (result) {
+                if (result.isOk === false) alert(result.message);
+                location.reload();
+            },
+            async: true
+        });
+
+    });
+</script>
+
+<script th:inline="javascript">
+    var subjects = /*[[${subjects_name}]]*/;
+    var marks = /*[[${marks}]]*/;
+</script>
+
+
+<!-- Required chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- Chart radar -->
+<script>
+    const dataRadar = {
+        labels: subjects,
+        datasets: [
+            {
+                label: "Успеваемость",
+                data: marks,
+                fill: true,
+                backgroundColor: "rgba(54, 162, 235, 0.2)",
+                borderColor: "rgb(54, 162, 235)",
+                pointBackgroundColor: "rgb(54, 162, 235)",
+                pointBorderColor: "#fff",
+                pointHoverBackgroundColor: "#fff",
+                pointHoverBorderColor: "rgb(54, 162, 235)",
+            },
+            {data: [2]}
+        ],
+    };
+
+    const configRadarChart = {
+        type: "radar",
+        data: dataRadar,
+        options: {},
+    };
+
+    var chartBar = new Chart(
+        document.getElementById("chartRadar"),
+        configRadarChart
+    );
+</script>
+</body>
+</html>

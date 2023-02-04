@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+<head>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title th:value="${candidates.submissionDate}"></title>
+</head>
+<body>
+<div th:insert="header">...</div>
+<div class="w-full max-w-xs">
+    <h3 class="font-bold" th:text="'Имя кандидата ' + ${candidates.user.login}"></h3>
+    <p th:text="'Дата поступления ' + ${candidates.submissionDate}"></p>
+</div>
+</body>
+</html>

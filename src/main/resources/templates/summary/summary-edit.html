@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit preparation_program</title>
+</head>
+<body>
+<div th:insert="header">...</div>
+<div class="w-full max-w-xs">
+    <form th:object="${summary}" th:action="${'/summary/edit/'+summary.getId()}" method="post"
+          class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+       <label>
+            Оценка:
+            <input th:field="*{mark}" type="number" name="mark" placeholder="Введите оценку"
+                   class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+        </label>
+        <div style="color: red" th:if="${#fields.hasErrors('mark')}" th:errors="*{mark}"></div>
+        <br>
+
+        <label> Предмет:
+            <select th:field="*{subject}">
+                <option th:each="sub : ${subjects}" th:text="${sub.name}" th:value="${sub.id}"></option>
+            </select>
+        </label>
+        <div style="color: red" th:if="${#fields.hasErrors('subject')}" th:errors="*{subject}"></div>
+        <br>
+        <label> Кандидат:
+
+            <select th:field="*{candidate_info}">
+                <option th:each="can : ${candidate}" th:text="${can.getUser().login}"
+                        th:value="${can.getId()}"></option>
+            </select>
+            <div style="color: red" th:if="${#fields.hasErrors('candidate_info')}" th:errors="*{candidate_info}"></div>
+        </label> <br>
+        <label> Институт:
+
+            <select th:field="*{education_institution}">
+                <option th:each="ed : ${education_institutions}" th:text="${ed.name}" th:value="${ed.id}"></option>
+            </select>
+            <div style="color: red" th:if="${#fields.hasErrors('education_institution')}"
+                 th:errors="*{education_institution}"></div>
+        </label> <br>
+        <button type="submit"
+                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+            Редактировать отделение
+        </button>
+    </form>
+</div>
+</body>
+</html>

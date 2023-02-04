@@ -1,0 +1,37 @@
+<!DOCTYPE HTML>
+
+<link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Subject</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<body>
+<div th:insert="header">...</div>
+<div class="w-full max-w-xs">
+    <h1 class="font-bold">Все предметы</h1>
+    <a href="/summary/filter" class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800">Поиск
+        Программ подготовок</a>
+    <br>
+    <a href="/summary/add" class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800">Добавить
+        Программу подготовки</a>
+    <div th:each="el : ${summary}">
+        <div class="inline-block align-baseline rounded w-full py-2 px-3 bg-transparent hover:bg-teal-100 shadow">
+            <h3 th:text="${el.mark}" class="font-bold"></h3>
+            <h3 th:text="${el.subject.name}" ></h3>
+            <p th:text="${el.candidate_info.user.login}"></p>
+
+            <p>
+                <a class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800"
+                   th:href="'/summary/edit/'+${el.getId()}">Редактировать</a>
+                <a class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800"
+                   th:href="'/summary/show/'+${el.getId()}">Посмореть</a>
+                <a class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800"
+                   th:href="'/summary/del/'+${el.getId()}">Удалить</a>
+
+            </p>
+        </div>
+    </div>
+</div>
+</body>
+</html>
